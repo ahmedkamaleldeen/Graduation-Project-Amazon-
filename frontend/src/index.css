@@ -17,9 +17,10 @@ header a{
   text-decoration: none;
 } */
 .site-container{
-  min-height: 100vh;
+  min-height: 150vh;
 
 }
+
 main {
   flex: 1;
 }
