@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 // import { Link } from "react-router-dom";
 // import data from '../data';
 import axios from "axios";
@@ -9,6 +9,8 @@ import Product from "../components/Product";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import ControlledCarousel from "../components/ControlledCarousel";
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -60,8 +62,15 @@ function HomeScreen() {
 
     // results();
   }, []);
+    const [index, setIndex] = useState(0);
+  
+    const handleSelect = (selectedIndex, e) => {
+      setIndex(selectedIndex);
+    };
   return (
+
     <div>
+<ControlledCarousel/>
       <Helmet>
         <title>Amazon</title>
       </Helmet>
