@@ -58,7 +58,7 @@ function Rating(props) {
               : "far fa-star"
           }
         />
-      </span>
+      </span>{' '}
       <span>
         {numReviews} reviews 
       </span>

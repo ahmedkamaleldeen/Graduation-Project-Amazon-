@@ -1,31 +1,33 @@
 // import { Link } from "react-router-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 // import data from "./data";
-import { toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import HomeScreen from "./screens/HomeScreen";
-import ProductScreen from "./screens/ProductScreen";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import { LinkContainer } from "react-router-bootstrap";
-import { Link } from "react-router-dom";
-import Badge from "react-bootstrap/Badge";
-import Nav from "react-bootstrap/Nav";
-import { useContext } from "react";
-import { Store } from "./Store";
-import CartScreen from "./screens/CartScreen";
-import SigninScreen from "./screens/SigninScreen";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import HomeScreen from './screens/HomeScreen';
+import ProductScreen from './screens/ProductScreen';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
+import Badge from 'react-bootstrap/Badge';
+import Nav from 'react-bootstrap/Nav';
+import { useContext } from 'react';
+import { Store } from './Store';
+import CartScreen from './screens/CartScreen';
+import SigninScreen from './screens/SigninScreen';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Footer from './components/Footer';
+
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
   const signoutHandler = () => {
-    ctxDispatch({ type: "USER_SIGNOUT" });
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("shippingAddress");
-    localStorage.removeItem("paymentMethod");
-    window.location.href = "/signin";
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
+    localStorage.removeItem('paymentMethod');
+    window.location.href = '/signin';
   };
   return (
     <BrowserRouter>
@@ -42,7 +44,7 @@ function App() {
                   Cart
                   {cart.cartItem.length > 0 && (
                     <Badge pill bg="danger">
-                      {cart.cartItem.reduce((a, c) => a + c.quantity, 0)}{" "}
+                      {cart.cartItem.reduce((a, c) => a + c.quantity, 0)}{' '}
                     </Badge>
                   )}
                 </Link>
@@ -83,9 +85,7 @@ function App() {
             </Routes>
           </Container>
         </main>
-        <footer>
-          <div className="text-center">all right reserved</div>
-        </footer>
+        <Footer />
       </div>
     </BrowserRouter>
   );
