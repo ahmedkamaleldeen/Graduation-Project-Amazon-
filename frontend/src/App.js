@@ -27,6 +27,8 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
+    localStorage.removeItem('cartItems');
+
     window.location.href = '/signin';
   };
   return (
@@ -42,9 +44,9 @@ function App() {
               <Nav className="me-auto">
                 <Link to="/cart" className="nav-link">
                   Cart
-                  {cart.cartItem.length > 0 && (
+                  {cart.cartItems.length > 0 && (
                     <Badge pill bg="danger">
-                      {cart.cartItem.reduce((a, c) => a + c.quantity, 0)}{' '}
+                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
                     </Badge>
                   )}
                 </Link>
