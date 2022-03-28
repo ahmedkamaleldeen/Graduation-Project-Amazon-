@@ -14,7 +14,7 @@ function CartScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   
   const {
-    cart: { cartItem },
+    cart: { cartItems },
   } = state;
   const updateCartHandler =  (item, quantity) => {
      axios.get(`/api/products/${item._id}`).then((res) => {
@@ -42,13 +42,13 @@ function CartScreen() {
       <h1>Shopping Cart</h1>
       <Row>
         <Col md={8}>
-          {cartItem.length === 0 ? (
+          {cartItems.length === 0 ? (
             <MessageBox>
               Cart is empty.<Link to="/">Go Shopping</Link>
             </MessageBox>
           ) : (
             <ListGroup>
-              {cartItem.map((item) => (
+              {cartItems.map((item) => (
                 <ListGroup.Item key={item._id}>
                   <Row className="align-items-center">
                     <Col md={4}>
@@ -102,9 +102,9 @@ function CartScreen() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>
-                    Subtotal ({cartItem.reduce((a, c) => a + c.quantity, 0)}{" "}
+                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
                     items) : $
-                    {cartItem.reduce((a, c) => a + c.price * c.quantity, 0)}
+                    {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
                   </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -112,7 +112,7 @@ function CartScreen() {
                     <Button
                       type="button"
                       variant="warning"
-                      disabled={cartItem.length === 0}
+                      disabled={cartItems.length === 0}
                       onClick={checkoutHandler}
                     >
                       Proceed to Checkout

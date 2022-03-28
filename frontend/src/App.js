@@ -1,9 +1,9 @@
 // import { Link } from "react-router-dom";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 // import data from "./data";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // <<<<<<< HEAD
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
@@ -21,8 +21,8 @@ import SignupScreen from "./screens/SignupScreen";
 
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
-import PaymentMethodScreen from './screens/PaymentMethodScreen';
-import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import PaymentMethodScreen from "./screens/PaymentMethodScreen";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 // =======
 // import HomeScreen from './screens/HomeScreen';
 // import ProductScreen from './screens/ProductScreen';
@@ -37,24 +37,25 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 // import CartScreen from './screens/CartScreen';
 // import SigninScreen from './screens/SigninScreen';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
-import Footer from './components/Footer';
-import Button from 'react-bootstrap/Button';
-import { getError } from './Utils';
-import axios from 'axios';
-import SearchBox from './components/SearchBox';
-import SearchScreen from './screens/SearchScreen';
-
+import Footer from "./components/Footer";
+import Button from "react-bootstrap/Button";
+import { getError } from "./Utils";
+import axios from "axios";
+import SearchBox from "./components/SearchBox";
+import SearchScreen from "./screens/SearchScreen";
 
 // >>>>>>> 592ed9fe6ce6f87e375f3b3c41941113016fe596
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
   const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-    window.location.href = '/signin';
+    ctxDispatch({ type: "USER_SIGNOUT" });
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("paymentMethod");
+    localStorage.removeItem("cartItems");
+
+    window.location.href = "/signin";
   };
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -71,12 +72,18 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
-      <div className={sidebarIsOpen?"d-flex flex-column site-container active-cont":"d-flex flex-column site-container"}>
+      <div
+        className={
+          sidebarIsOpen
+            ? "d-flex flex-column site-container active-cont"
+            : "d-flex flex-column site-container"
+        }
+      >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
           <Navbar bg="dark" variant="dark">
-            <Container>
-            <Button
+            <Container fluid>
+              <Button
                 variant="dark"
                 onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
               >
@@ -88,9 +95,9 @@ function App() {
               <Nav className="me-auto">
                 <Link to="/cart" className="nav-link">
                   Cart
-                  {cart.cartItem.length > 0 && (
+                  {cart.cartItems.length > 0 && (
                     <Badge pill bg="danger">
-                      {cart.cartItem.reduce((a, c) => a + c.quantity, 0)}{' '}
+                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
                     </Badge>
                   )}
                 </Link>
@@ -110,16 +117,18 @@ function App() {
                   </Link>
                 )}
               </Nav>
-              <SearchBox/>
             </Container>
+            <div style={{ marginRight: "100px",width:"600px" }}>
+              <SearchBox />
+            </div>
           </Navbar>
           {/* <Link to="/">amazon</Link> */}
         </header>
         <div
           className={
             sidebarIsOpen
-              ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
-              : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+              ? "active-nav side-navbar d-flex justify-content-between flex-wrap flex-column"
+              : "side-navbar d-flex justify-content-between flex-wrap flex-column"
           }
         >
           <Nav className="flex-column text-white w-100 p-2">
@@ -146,12 +155,11 @@ function App() {
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
-              <Route path="/search" element={<SearchScreen/>} />
+              <Route path="/search" element={<SearchScreen />} />
 
-              <Route path="/shipping" element={<ShippingAddressScreen/>}/>
-              <Route path="/payment" element={<PaymentMethodScreen/>}/>
-              <Route path="/placeorder" element={<PlaceOrderScreen/>}/>
-
+              <Route path="/shipping" element={<ShippingAddressScreen />} />
+              <Route path="/payment" element={<PaymentMethodScreen />} />
+              <Route path="/placeorder" element={<PlaceOrderScreen />} />
             </Routes>
           </Container>
         </main>
