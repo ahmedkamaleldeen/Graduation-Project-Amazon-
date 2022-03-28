@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../Store";
-import CkeckOutSteps from "../components/CkeckOutSteps";
+import CheckOutSteps from "../components/CheckOutSteps";
 function ShippingAddressScreen() {
     const { state, dispatch: ctxDispatch } = useContext(Store);
 
@@ -53,7 +53,7 @@ function ShippingAddressScreen() {
       <Helmet>
         <title>Shipping Address</title>
       </Helmet>
-      <CkeckOutSteps step1 step2></CkeckOutSteps>
+      <CheckOutSteps step1 step2></CheckOutSteps>
       <div className="container w-50">
         <h1 className="my-3">Shipping Address</h1>
         <Form onSubmit={submitHandler}>

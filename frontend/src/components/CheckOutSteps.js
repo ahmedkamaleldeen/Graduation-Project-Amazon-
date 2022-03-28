@@ -2,7 +2,7 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import './style.css'
-function CkeckOutSteps(props) {
+function CheckOutSteps(props) {
   return (
     <Row className="checkout-steps">
       <Col className={props.step1 ? "active" : ""}>Sign-In</Col>
@@ -13,4 +13,4 @@ function CkeckOutSteps(props) {
   );
 }
 
-export default CkeckOutSteps;
+export default CheckOutSteps;
