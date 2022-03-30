@@ -36,7 +36,7 @@ export default function PlaceOrderScreen() {
   
     const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // 123.2345 => 123.23
     cart.itemsPrice = round2(
-      cart.cartItem.reduce((a, c) => a + c.quantity * c.price, 0)
+      cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
     );
     cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
     cart.taxPrice = round2(0.15 * cart.itemsPrice);
@@ -115,7 +115,7 @@ useEffect(() => {
             <Card.Body>
               <Card.Title>Items</Card.Title>
               <ListGroup variant="flush">
-                {cart.cartItem.map((item) => (
+                {cart.cartItems.map((item) => (
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
                       <Col md={6}>
@@ -178,7 +178,7 @@ useEffect(() => {
                       type="button"
                       className="bg-warning text-dark"
                       onClick={placeOrderHandler}
-                      disabled={cart.cartItem.length === 0}
+                      // disabled={cart.cartItem.length === 0}
                     >
                       Place Order
                     </Button>
