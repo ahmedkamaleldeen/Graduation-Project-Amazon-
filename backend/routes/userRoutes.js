@@ -1,9 +1,10 @@
 import express from "express";
 import User from "../models/userModel.js";
-import { generateToken } from "../utils.js";
+import { generateToken,isAdminAuth } from "../utils.js";
 import expressAsyncHandler from 'express-async-handler'
 import bcrypt from 'bcryptjs'
 const userRouter = express.Router();
+
 userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
@@ -40,4 +41,35 @@ userRouter.post(
       token: generateToken(user),
     });
   }));
+
+userRouter.get('/',  isAdminAuth,
+expressAsyncHandler (async (erq, res) => {
+  const users = await User.find();
+  res.send({ users });
+}));
+userRouter.get(
+  `/:id`,
+  isAdminAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send('user not found');
+    }
+  })
+);
+userRouter.delete(
+  `/:id`,
+  isAdminAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = User.findById(req.params.id);
+    if (user) {
+      await User.findByIdAndDelete(req.params.id);
+    } else {
+      res.status(404).send('user not found');
+    }
+  })
+);
+
 export default userRouter;

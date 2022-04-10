@@ -7,6 +7,8 @@ import seedRouter from "./routes/seedRoutes.js";
 import productRouter from './routes/productRoutes.js'
 import userRouter from "./routes/userRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import cors from "cors";
+import adminRouter from "./routes/adminRoutes.js";
 
 dotenv.config();
 mongoose
@@ -19,14 +21,13 @@ mongoose
   });
 
 const app = express();
+app.use(cors()) ;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use('/api/seed',seedRouter);
-// app.get("/api/products", function (req, res) {
-//   res.send(data.products);
-// });
 app.use('/api/products',productRouter);
 app.use('/api/users',userRouter);
+app.use('/api/admin', adminRouter);
 app.use('/api/orders',orderRouter);
 
 const __dirname = path.resolve();
