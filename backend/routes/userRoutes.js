@@ -1,6 +1,6 @@
 import express from "express";
 import User from "../models/userModel.js";
-import { generateToken, isAuth } from "../utils.js";
+import { generateToken, isAdminAuth, isAuth } from "../utils.js";
 import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import productRouter from "./productRoutes.js";
@@ -41,7 +41,6 @@ productRouter.post(
       isAdmin: user.isAdmin,
       token: generateToken(user),
     });
-<<<<<<< HEAD
   }));
 
 userRouter.get('/',  isAdminAuth,
@@ -71,8 +70,6 @@ userRouter.delete(
     } else {
       res.status(404).send('user not found');
     }
-=======
->>>>>>> 90c954d9222b5503f87e880e878a2da8b9396d8e
   })
 );
 

@@ -58,3 +58,16 @@ export const isAdminAuth = (req, res, next) => {
     res.status(401).send({ message: "no Token" });
   }
 };
+
+export const generateAdminToken = (admin) => {
+
+  return jwt.sign(
+      {
+          _id: admin._id,
+          name: admin.name,
+          email: admin.email,
+      },
+      process.env.JWT_SECRET, {
+      expiresIn: '7d',
+  })
+}

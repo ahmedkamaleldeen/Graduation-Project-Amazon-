@@ -27,10 +27,10 @@ export class RequestInterceptor implements HttpInterceptor {
       setHeaders: {
         Authorization: `Bearer ${token}`,
       },
-    }); 
+    });
        this.loaderService.Loading.next(true);
     return next.handle(jwtToken).pipe(
-      finalize(() => 
+      finalize(() =>
         this.loaderService.Loading.next(false) )
     );
 
