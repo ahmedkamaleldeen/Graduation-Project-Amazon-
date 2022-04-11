@@ -1,15 +1,12 @@
 import express from "express";
-// import data from "./data.js";
-import path from 'path';
+import cors from "cors";
+import data from "./data.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import seedRouter from "./routes/seedRoutes.js";
-import productRouter from './routes/productRoutes.js'
+import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
-import orderRouter from "./routes/orderRoutes.js";
-import cors from "cors";
-import adminRouter from "./routes/adminRoutes.js";
-
+import router from "./routes/orderRoutes.js";
 dotenv.config();
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -21,22 +18,20 @@ mongoose
   });
 
 const app = express();
-app.use(cors()) ;
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use('/api/seed',seedRouter);
-app.use('/api/products',productRouter);
-app.use('/api/users',userRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/orders',orderRouter);
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use("/api/seed", seedRouter);
+// app.get("/api/products", function (req, res) {
+//   res.send(data.products);
+// });
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/order", router);
 
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, '/frontend/build')));
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-);
-app.use((err,req,res,next)=>{
-  res.status(500).send({message:err.message});
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
 });
 
 const port = process.env.PORT || 5000;

@@ -1,18 +1,17 @@
-import Axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { toast } from 'react-toastify';
-import { getError } from '../Utils';
-import { Store } from '../Store';
-import CheckOutSteps from '../components/CheckOutSteps';
-import LoadingBox from '../components/LoadingBox';
-
+import React, { useContext, useEffect, useReducer } from "react";
+import { Store } from "../Store";
+import { toast } from "react-toastify";
+import { getError } from "../utils";
+import Card from "react-bootstrap/esm/Card";
+import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/esm/Row";
+import { Helmet } from "react-helmet-async";
+import CheckOutSteps from "../components/CheckOutSteps";
+import Button from "react-bootstrap/esm/Button";
+import { Link, useNavigate } from "react-router-dom";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import axios from "axios";
+import LoadingBox from "../components/LoadingBox";
 const reducer = (state, action) => {
   switch (action.type) {
     case "CREATE_REQUEST":
@@ -26,31 +25,25 @@ const reducer = (state, action) => {
   }
 };
 export default function PlaceOrderScreen() {
- 
-    const navigate = useNavigate();
-
-   
-  
-    const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { cart, userInfo } = state;
-  
-    const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // 123.2345 => 123.23
-    cart.itemsPrice = round2(
-      cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-    );
-    cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
-    cart.taxPrice = round2(0.15 * cart.itemsPrice);
-    cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
-
+  const navigate = useNavigate();
   const [{ loading }, dispatch] = useReducer(reducer, {
     loading: false,
   });
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo, cart } = state;
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; //123,1234 =>123.12
+  cart.itemsPrice = round2(
+    cart.cartItems.reduce((a, b) => a + b.quantity * b.price, 0)
+  );
+  console.log(round2(0), round2(10));
+  cart.shippingPrice = cart.itemPrice > 100 ? round2(0) : round2(10);
+  cart.taxPrice = round2(0.15 * cart.itemsPrice);
+  cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: "CREATE_REQUEST" });
-
-      const { data } = await Axios.post(
-        "/api/orders",
+      const { data } = await axios.post(
+        "/api/order",
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -69,23 +62,23 @@ export default function PlaceOrderScreen() {
       ctxDispatch({ type: "CART_CLEAR" });
       dispatch({ type: "CREATE_SUCCESS" });
       localStorage.removeItem("cartItems");
-      // navigate(`/order/${data.order._id}`);
+      console.log(data);
+      navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
       toast.error(getError(err));
     }
   };
-useEffect(() => {
+  useEffect(() => {
     if (!cart.paymentMethod) {
       navigate("/payment");
     }
   }, [cart, navigate]);
-
   return (
     <div>
-      <CheckOutSteps step1 step2 step3 step4></CheckOutSteps>
+      <CheckOutSteps step1 step2 step3 step4 />
       <Helmet>
-        <title>Preview Order</title>
+        <title>Place Order</title>
       </Helmet>
       <h1 className="my-3">Preview Order</h1>
       <Row>
@@ -94,10 +87,14 @@ useEffect(() => {
             <Card.Body>
               <Card.Title>Shipping</Card.Title>
               <Card.Text>
-                <strong>Name:</strong> {cart.shippingAddress.fullName} <br />
-                <strong>Address: </strong> {cart.shippingAddress.address},
-                {cart.shippingAddress.city}, {cart.shippingAddress.postalCode},
-                {cart.shippingAddress.country}
+                <strong>Name:</strong>
+                {"  "}
+                {cart.shippingAddress.fullName}
+                <br />
+                <strong>Address:</strong>
+                {"  "}
+                {cart.shippingAddress.address},{cart.shippingAddress.city},
+                {cart.shippingAddress.postalCode},{cart.shippingAddress.country}
               </Card.Text>
               <Link to="/shipping">Edit</Link>
             </Card.Body>
@@ -106,7 +103,7 @@ useEffect(() => {
             <Card.Body>
               <Card.Title>Payment</Card.Title>
               <Card.Text>
-                <strong>Method:</strong> {cart.paymentMethod}
+                <strong>Method: </strong> {cart.paymentMethod}
               </Card.Text>
               <Link to="/payment">Edit</Link>
             </Card.Body>
@@ -115,25 +112,26 @@ useEffect(() => {
             <Card.Body>
               <Card.Title>Items</Card.Title>
               <ListGroup variant="flush">
-                {cart.cartItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
-                    <Row className="align-items-center">
-                      <Col md={6}>
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="img-fluid rounded img-thumbnail"
-                          style={{ height: "80px" }}
-                        ></img>{" "}
-                        <Link to={`/product/${item.slug}`}>{item.name}</Link>
-                      </Col>
-                      <Col md={3}>
-                        <span>{item.quantity}</span>
-                      </Col>
-                      <Col md={3}>$ {item.price}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                ))}
+                {cart.cartItems.map((item) => {
+                  return (
+                    <ListGroup.Item key={item._id}>
+                      <Row className="align-items-center">
+                        <Col md={6}>
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="img-fluid rounded img-thumbnail"
+                          />{" "}
+                          <Link to={`/product/${item.slug}`}>{item.name}</Link>
+                        </Col>
+                        <Col md={3}>
+                          <span>{item.quantity}</span>
+                        </Col>
+                        <Col md={3}>$ {item.price}</Col>
+                      </Row>
+                    </ListGroup.Item>
+                  );
+                })}
               </ListGroup>
               <Link to="/cart">Edit</Link>
             </Card.Body>
@@ -165,7 +163,7 @@ useEffect(() => {
                 <ListGroup.Item>
                   <Row>
                     <Col>
-                      <strong> Order Total</strong>
+                      <strong>Order Total</strong>
                     </Col>
                     <Col>
                       <strong>$ {cart.totalPrice.toFixed(2)}</strong>
@@ -176,9 +174,8 @@ useEffect(() => {
                   <div className="d-grid">
                     <Button
                       type="button"
-                      className="bg-warning text-dark"
                       onClick={placeOrderHandler}
-                      // disabled={cart.cartItem.length === 0}
+                      disabled={cart.cartItems.length === 0}
                     >
                       Place Order
                     </Button>

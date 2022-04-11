@@ -48,12 +48,12 @@ function HomeScreen() {
     //   dispatch({ type: "FETCH_SUCCESS", payload: res.data });
     // }).catch((err=>{console.log(err)}));
     const fetchData = async () => {
-      dispatch({ type: 'FETCH_REQUEST' });
+      dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get('/api/products');
-        dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
+        const result = await axios.get("/api/products");
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: err.message });
+        dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
 
       // setProducts(result.data);
@@ -62,15 +62,14 @@ function HomeScreen() {
 
     // results();
   }, []);
-    const [index, setIndex] = useState(0);
-  
-    const handleSelect = (selectedIndex, e) => {
-      setIndex(selectedIndex);
-    };
-  return (
+  const [index, setIndex] = useState(0);
 
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex);
+  };
+  return (
     <div>
-<ControlledCarousel/>
+      <ControlledCarousel />
       <Helmet>
         <title>Amazon</title>
       </Helmet>
@@ -78,10 +77,10 @@ function HomeScreen() {
       <div className="container-fluid" >
         <Row>
           {loading ? (
-            <LoadingBox/>
-          ) : error ?
-          <MessageBox variant="danger">{error}</MessageBox>:
-          (
+            <LoadingBox />
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
             products.map((product) => {
               return (
                 <Col key={product.slug} sm={6} md={4} lg={3} className="mb-3">

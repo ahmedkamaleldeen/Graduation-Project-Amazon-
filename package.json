@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@paypal/react-paypal-js": "^7.6.0",
+    "cors": "^2.8.5",
     "react-router-dom": "^6.2.2"
   },
   "name": "amazon",

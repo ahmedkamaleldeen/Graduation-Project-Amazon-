@@ -1,8 +1,9 @@
 import express from "express";
 import User from "../models/userModel.js";
-import { generateToken,isAdminAuth } from "../utils.js";
-import expressAsyncHandler from 'express-async-handler'
-import bcrypt from 'bcryptjs'
+import { generateToken, isAuth } from "../utils.js";
+import expressAsyncHandler from "express-async-handler";
+import bcrypt from "bcryptjs";
+import productRouter from "./productRoutes.js";
 const userRouter = express.Router();
 
 userRouter.post(
@@ -16,7 +17,7 @@ userRouter.post(
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
-          token:generateToken(user)
+          token: generateToken(user),
         });
         return;
       }
@@ -24,10 +25,10 @@ userRouter.post(
     res.status(401).send({ message: "Invalid email or password" });
   })
 );
-userRouter.post(
-  '/signup',
-  expressAsyncHandler(async (req, res) => {
-    const newUser = new User({
+productRouter.post(
+  "/signup",
+  expressAsyncHandler(async (req, res, next) => {
+    const newUser = await new User({
       name: req.body.name,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password),
@@ -40,6 +41,7 @@ userRouter.post(
       isAdmin: user.isAdmin,
       token: generateToken(user),
     });
+<<<<<<< HEAD
   }));
 
 userRouter.get('/',  isAdminAuth,
@@ -69,7 +71,33 @@ userRouter.delete(
     } else {
       res.status(404).send('user not found');
     }
+=======
+>>>>>>> 90c954d9222b5503f87e880e878a2da8b9396d8e
   })
 );
 
+productRouter.put(
+  "/profile",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
+      const updateUser = await user.save();
+      res.send({
+        _id: updateUser._id,
+        name: updateUser.name,
+        email: updateUser.email,
+        isAdmin: updateUser.isAdmin,
+        token: generateToken(updateUser),
+      });
+    } else {
+      res.status(404).send({ message: "User Not Found" });
+    }
+  })
+);
 export default userRouter;

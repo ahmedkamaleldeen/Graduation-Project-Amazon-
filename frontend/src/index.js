@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap/dist/js/bootstrap.min.js";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { HelmetProvider } from "react-helmet-async";
 import { StoreProvider } from "./Store";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 // import { Provider } from "reat-redux";
 // import { store } from "./Store/store";
 ReactDOM.render(
@@ -14,7 +16,9 @@ ReactDOM.render(
     <StoreProvider>
       {" "}
       <HelmetProvider>
-        <App />
+        <PayPalScriptProvider deferLoading={true}>
+          <App />
+        </PayPalScriptProvider>
       </HelmetProvider>
     </StoreProvider>
 

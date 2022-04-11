@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import Button from "react-bootstrap/esm/Button";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBox() {
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const submitHandler = (e) => {
     e.preventDefault();
-    navigate(query ? `/search/?query=${query}` : '/search');
+    navigate(query ? `/search/?query=${query}` : "/search");
   };
 
   return (
-    <Form className="d-flex me-auto" onSubmit={submitHandler}>
+    <Form className="d-flex w-100 mx-auto" onSubmit={submitHandler}>
       <InputGroup>
         <FormControl
           type="text"
@@ -22,10 +22,15 @@ export default function SearchBox() {
           id="q"
           onChange={(e) => setQuery(e.target.value)}
           placeholder="search products..."
-          aria-label="Search Products"
+          aria-label="search products"
           aria-describedby="button-search"
         ></FormControl>
-        <Button variant="warning" type="submit" id="button-search">
+        <Button
+          className="btn-outline-primary"
+          variant="outline-primary"
+          type="submit"
+          id="button-search"
+        >
           <i className="fas fa-search"></i>
         </Button>
       </InputGroup>

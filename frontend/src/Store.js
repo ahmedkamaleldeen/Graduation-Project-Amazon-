@@ -1,23 +1,29 @@
+//
+
 import { createContext, useReducer } from "react";
 
 export const Store = createContext();
-const intialState = {
+
+const initialState = {
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
   cart: {
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
-      : { location: {} },
+      : {},
+    paymentMethod: localStorage.getItem("paymentMethod")
+      ? localStorage.getItem("paymentMethod")
+      : "",
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
   },
 };
+
 function reducer(state, action) {
   switch (action.type) {
     case "CART_ADD_ITEM":
-      //add to cart
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
         (item) => item._id === newItem._id
@@ -29,13 +35,18 @@ function reducer(state, action) {
         : [...state.cart.cartItems, newItem];
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
-
+    // return {
+    //   ...state,
+    //   cart: {
+    //     ...state.cart,
+    //     cartItems: [...state.cart.cartItems, action.payload],
+    //   },
+    // };
     case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
         (item) => item._id !== action.payload._id
       );
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
       return { ...state, cart: { ...state.cart, cartItems } };
     }
     case "USER_SIGNIN":
@@ -43,43 +54,28 @@ function reducer(state, action) {
     case "USER_SIGNOUT":
       return {
         ...state,
-        cart: {
-          cartItems: [],
-          shippingAddress: {},
-          paymentMethod: "",
-          userInfo: null,
-        },
+        userInfo: null,
+        cart: { cartItems: [], shippingAddress: {}, paymentMethod: "" },
       };
     case "SAVE_SHIPPING_ADDRESS":
       return {
         ...state,
-        cart: {
-          ...state.cart,
-          shippingAddress: action.payload,
-        },
-      };
-      case 'SAVE_SHIPPING_ADDRESS_MAP_LOCATION':
-      return {
-        ...state,
-        cart: {
-          ...state.cart,
-          shippingAddress: {
-            ...state.cart.shippingAddress,
-            location: action.payload,
-          },
-        },
+        cart: { ...state.cart, shippingAddress: action.payload },
       };
     case "SAVE_PAYMENT_METHOD":
       return {
         ...state,
         cart: { ...state.cart, paymentMethod: action.payload },
       };
+    case "CART_CLEAR":
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
     default:
       return state;
   }
 }
+
 export function StoreProvider(props) {
-  const [state, dispatch] = useReducer(reducer, intialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
 }
