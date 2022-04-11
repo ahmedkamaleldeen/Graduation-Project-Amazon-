@@ -30,6 +30,11 @@ main {
   color: black !important;
   max-width: 100% !important;
 }
+.btn-primary,
+.btn-outline-primary {
+  background-color: #f0c040;
+  color: #000000;
+}
 .products {
   display: flex !important;
   flex-wrap: wrap !important;

@@ -41,7 +41,7 @@ export default function ProductListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/product/admin?page=${page} `, {
+        const { data } = await axios.get(`/api/products/admin?page=${page} `, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
 

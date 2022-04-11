@@ -5,6 +5,7 @@ import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import productRouter from "./productRoutes.js";
 const userRouter = express.Router();
+
 userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {

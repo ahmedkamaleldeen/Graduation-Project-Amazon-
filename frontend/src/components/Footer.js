@@ -92,7 +92,7 @@ export default function Footer() {
         <MDBRow>
           <div>
             <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
-            <div class="d-flex justify-content-around">
+            <div className="d-flex justify-content-around">
               <p>
                 <i className="fas fa-home "></i> New York, NY 10012, US
               </p>
@@ -127,9 +127,9 @@ export default function Footer() {
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
         © 2020 Copyright:
-        <a className="text-white" to="https://mdbootstrap.com/">
+        <Link className="text-white" to="https://mdbootstrap.com/">
           MDBootstrap.com
-        </a>
+        </Link>
       </div>
     </MDBFooter>
   );

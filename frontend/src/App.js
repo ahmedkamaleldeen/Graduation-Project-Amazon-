@@ -1,102 +1,3 @@
-// // import { Link } from "react-router-dom";
-// import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import "./App.css";
-// // import data from "./data";
-// import { toast, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-// import HomeScreen from "./screens/HomeScreen";
-// import ProductScreen from "./screens/ProductScreen";
-// import Navbar from "react-bootstrap/Navbar";
-// import Container from "react-bootstrap/Container";
-// import { LinkContainer } from "react-router-bootstrap";
-// import { Link } from "react-router-dom";
-// import Badge from "react-bootstrap/Badge";
-// import Nav from "react-bootstrap/Nav";
-// import { useContext } from "react";
-// import { Store } from "./Store";
-// import CartScreen from "./screens/CartScreen";
-// import SigninScreen from "./screens/SigninScreen";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-// import Footer from "./components/Footer";
-
-// function App() {
-//   const { state, dispatch: ctxDispatch } = useContext(Store);
-//   const { cart, userInfo } = state;
-//   const signoutHandler = () => {
-//     ctxDispatch({ type: "USER_SIGNOUT" });
-//     localStorage.removeItem("userInfo");
-//     localStorage.removeItem("shippingAddress");
-//     localStorage.removeItem("paymentMethod");
-//     localStorage.removeItem("cartItems");
-
-//     window.location.href = "/signin";
-//   };
-//   return (
-//     <BrowserRouter>
-//       <div className="d-flex flex-column site-container">
-//         <ToastContainer position="bottom-center" limit={1} />
-//         <header>
-//           <Navbar bg="dark" variant="dark">
-//             <Container>
-//               <LinkContainer to="/">
-//                 <Navbar.Brand>Amazon</Navbar.Brand>
-//               </LinkContainer>
-//               <Nav className="me-auto">
-//                 <Link to="/cart" className="nav-link">
-//                   Cart
-//                   {cart.cartItems.length > 0 && (
-//                     <Badge pill bg="danger">
-//                       {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
-//                     </Badge>
-//                   )}
-//                 </Link>
-//                 {userInfo ? (
-//                   <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
-//                     <LinkContainer to="/profile">
-//                       <NavDropdown.Item>User Profile</NavDropdown.Item>
-//                     </LinkContainer>
-//                     <LinkContainer to="/orderhistory">
-//                       <NavDropdown.Item>Order History</NavDropdown.Item>
-//                     </LinkContainer>
-//                     <NavDropdown.Divider />
-//                     <Link
-//                       className="dropdown-item"
-//                       to="#signout"
-//                       onClick={signoutHandler}
-//                     >
-//                       Sign Out
-//                     </Link>
-//                   </NavDropdown>
-//                 ) : (
-//                   <Link className="nav-link" to="/signin">
-//                     Sign In
-//                   </Link>
-//                 )}
-//               </Nav>
-//             </Container>
-//           </Navbar>
-//           {/* <Link to="/">amazon</Link> */}
-//         </header>
-//         <main>
-//           <Container className="mt-3">
-//             <Routes>
-//               <Route path="/product/:slug" element={<ProductScreen />} />
-//               <Route path="/" element={<HomeScreen />} />
-//               <Route path="/cart" element={<CartScreen />} />
-//               <Route path="/signin" element={<SigninScreen />} />
-//             </Routes>
-//           </Container>
-//         </main>
-
-//         <Footer />
-//       </div>
-//     </BrowserRouter>
-//   );
-// }
-
-// export default App;
-
-// import { useReducer } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -113,7 +14,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import CartScreen from "./screens/CartScreen";
 import SigninScreen from "./screens/SigninScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
-import SignUpScreen from "./screens/SignUpScreen";
+import SignUpScreen from "./screens/SignupScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
@@ -137,6 +38,7 @@ import {
   darkTheme,
   GlobalStyles,
 } from "./components/styles/GlobalStyles";
+import PaymentMethodScreen from "./screens/PaymentMethodScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -154,7 +56,7 @@ function App() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await axios.get("/api/product/categories");
+        const { data } = await axios.get("/api/products/categories");
         console.log(data);
         setCategories(data);
       } catch (err) {
