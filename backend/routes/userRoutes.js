@@ -45,7 +45,7 @@ userRouter.post(
 userRouter.get('/',  isAdminAuth,
 expressAsyncHandler (async (erq, res) => {
   const users = await User.find();
-  res.send({ users });
+  res.send( users );
 }));
 userRouter.get(
   `/:id`,

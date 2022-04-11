@@ -60,6 +60,7 @@ getAllinfo() {
   });
 }
 
+
   getAllProducts() {
     this.api.getProduct().subscribe({
       next: (res:Products[]) => {
