@@ -10,29 +10,29 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 function CartScreen() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  
+
   const {
     cart: { cartItems },
   } = state;
-  const updateCartHandler =  (item, quantity) => {
-     axios.get(`/api/products/${item._id}`).then((res) => {
-        if (res.data.products.countInStock < quantity) {
-          window.alert("Sorry,Product is out of sttock");
-          return;
-        }
-      });
-      ctxDispatch({
-        type: "CART_ADD_ITEM",
-        payload: { ...item, quantity },
-      });
+  const updateCartHandler = (item, quantity) => {
+    axios.get(`/api/products/${item._id}`).then((res) => {
+      if (res.data.products.countInStock < quantity) {
+        window.alert("Sorry,Product is out of sttock");
+        return;
+      }
+    });
+    ctxDispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...item, quantity },
+    });
   };
   const removeItemHandler = (item) => {
-    ctxDispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+    ctxDispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
   const checkoutHandler = () => {
-    navigate('/signin?redirect=/shipping');
+    navigate("/signin?redirect=/shipping");
   };
   return (
     <div>
@@ -83,7 +83,7 @@ function CartScreen() {
                     </Col>
                     <Col md={3}>$ {item.price}</Col>
                     <Col md={2}>
-                    <Button
+                      <Button
                         onClick={() => removeItemHandler(item)}
                         variant="light"
                       >

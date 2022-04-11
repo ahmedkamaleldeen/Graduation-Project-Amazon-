@@ -1,29 +1,35 @@
-import React, { useContext, useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import Button from "react-bootstrap/esm/Button";
+import Container from "react-bootstrap/esm/Container";
+import Form from "react-bootstrap/esm/Form";
 import { Helmet } from "react-helmet-async";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Axios from "axios";
+import { toast } from "react-toastify";
 import { Store } from "../Store";
 import { getError } from "../utils";
-import { toast } from "react-toastify";
 
-function SigninScreen() {
+export default function SignUpScreen() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-
+  console.log(redirectInUrl);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error("password don't match");
+      return;
+    }
     try {
-      const { data } = await Axios.post("/api/users/signin", {
+      const { data } = await axios.post("/api/user/signup", {
+        name,
         email,
         password,
       });
@@ -32,7 +38,6 @@ function SigninScreen() {
       navigate(redirect || "/");
     } catch (err) {
       toast.error(getError(err));
-      // alert("invalid email or password")
     }
   };
   useEffect(() => {
@@ -41,12 +46,16 @@ function SigninScreen() {
     }
   }, [navigate, redirect, userInfo]);
   return (
-    <Container style={{ width: "600px" }}>
+    <Container className="small-container">
       <Helmet>
-        <title>Sign In</title>
+        <title>Sign Up</title>
       </Helmet>
-      <h1 className="my-3">Sign In</h1>
+      <h1 className="mb-3">Sign Up</h1>
       <Form onSubmit={submitHandler}>
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control required onChange={(e) => setName(e.target.value)} />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -63,18 +72,22 @@ function SigninScreen() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
+        <Form.Group className="mb-3" controlId="confirmPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </Form.Group>
         <div className="mb-3">
-          <Button className="bg-warning text-dark" type="submit">
-            Sign In
-          </Button>
+          <Button type="submit">Sign Up</Button>
         </div>
         <div className="mb-3">
-          New customer?{" "}
-          <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
+          Already have an account?{" "}
+          <Link to={`/signin?redirect=${redirect}`}>sign-In</Link>
         </div>
       </Form>
     </Container>
   );
 }
-
-export default SigninScreen;
