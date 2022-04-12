@@ -39,7 +39,7 @@ export default function ProfileScreen() {
     }
     try {
       const { data } = await axios.put(
-        "/api/user/profile",
+        "/api/users/profile",
         {
           name,
           email,

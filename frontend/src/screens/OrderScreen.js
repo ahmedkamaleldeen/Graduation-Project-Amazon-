@@ -75,7 +75,7 @@ export default function OrderScreen() {
       try {
         dispatch({ type: "PAY_REQUEST" });
         const { data } = await axios.put(
-          `/api/order/${order._id}/pay`,
+          `/api/orders/${order._id}/pay`,
           datails,
           {
             headers: {
@@ -100,7 +100,7 @@ export default function OrderScreen() {
     const fetchOrder = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/order/${orderId}`, {
+        const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
