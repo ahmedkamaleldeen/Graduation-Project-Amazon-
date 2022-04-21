@@ -8,9 +8,14 @@ import productRouter from './routes/productRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
+import path from 'path';
+
 dotenv.config();
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
   .then(() => {
     console.log('connected to db');
   })
@@ -18,9 +23,14 @@ mongoose
     console.log(err.message);
   });
 
+  const __dirname = path.resolve();
+
+
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');

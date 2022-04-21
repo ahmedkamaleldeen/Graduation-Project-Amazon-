@@ -47,7 +47,7 @@ orderRouter.delete(
   })
 );
 orderRouter.get(
-  "/summary",
+  "/adminsummary",
   expressAsyncHandler(async (req, res) => {
     const orders = await Order.aggregate([
       {
@@ -75,9 +75,18 @@ orderRouter.get(
         },
       },
     ]);
-    res.send({ users, orders, productCategories });
+    const products = await Product.aggregate([
+      {
+        $group: {
+          _id: null,
+          numProducts: { $sum: 1 },
+        },
+      },
+    ]);
+    res.send({ users, orders, productCategories,products });
   })
 );
+
 
 orderRouter.get(
   "/summry",
@@ -167,4 +176,27 @@ orderRouter.put(
   })
 );
 
+orderRouter.put('/notDeliverd/:id',  isAdminAuth,
+expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered=false;
+    const updatedOrder = await order.save();
+    res.send({ message: "Order not Deliverd", order: updatedOrder });
+  } else {
+    res.status(404).send({ message: "Order Deliverd Not changes" });
+  }
+}));
+orderRouter.put('/deliverd/:id',  isAdminAuth,
+expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered=true;
+    order.deliveredAt =new Date();
+    const updatedOrder = await order.save();
+    res.send({ message: "Order Deliverd", order: updatedOrder });
+  } else {
+    res.status(404).send({ message: "Order Not Found" });
+  }
+}));
 export default orderRouter;
