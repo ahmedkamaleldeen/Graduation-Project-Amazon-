@@ -226,18 +226,20 @@ productRouter.post(
               console.log(err);
               return next(err);
           }
-          res.json(gallery);
-      });
+          res.status(201).send({
+            message: 'product created successfully ',})      });
   }
   })
 );
 
 productRouter.put(
-  `/:id`,
+  `/:id`,upload.single('file'),
   isAdminAuth,
   expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
+      req.body.image = 'http://localhost:5000/images/' + req.file.filename;
+
       await Product.findByIdAndUpdate(req.params.id, {
         name: req.body.name,
         slug: req.body.slug,
@@ -250,10 +252,12 @@ productRouter.put(
         numReviews: req.body.numReviews,
         description: req.body.description,
       });
-      // res.send(product)
+      res.status(201).send({
+        message: 'product Updated successfully ',})
     } else {
       res.status(404).send({ message: 'product not found' });
     }
+
   })
 );
 

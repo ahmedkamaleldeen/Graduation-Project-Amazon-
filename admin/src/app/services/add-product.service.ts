@@ -44,8 +44,18 @@ export class AddProductService {
     formData.append('description', data.description);
     return this.http.post<any>('/api/products/add', formData);
   }
-  putProduct(data: any, id: any) {
-    return this.http.put<any>(`/api/products/${id}`, data);
+  putProduct(data: any, editdata: any, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('name', data.name);
+    formData.append('slug', data.slug);
+    formData.append('category', data.category);
+    formData.append('price', data.price);
+    formData.append('countInStock', data.countInStock);
+    formData.append('brand', data.brand);
+    formData.append('rating', data.rating);
+    formData.append('description', data.description);
+    return this.http.put<any>(`/api/products/${editdata._id}`, formData);
   }
   deleteProduct(data: any) {
     return this.http.delete<any>(`/api/products/${data._id}`, data);

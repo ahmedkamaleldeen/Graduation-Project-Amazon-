@@ -30,7 +30,7 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <mat-label>Gallery Image</mat-label>
+      <mat-label>Image</mat-label>
       <ngx-mat-file-input formControlName="image" placeholder="Select Image" valuePlaceholder="No image file selected"
         [errorStateMatcher]="matcher"></ngx-mat-file-input>
       <mat-icon matSuffix>folder</mat-icon>
@@ -38,7 +38,6 @@
         <span *ngIf="!protectForm.get('image')?.valid">Please select image file</span>
       </mat-error>
     </mat-form-field>
-      <img id="img" [src]="protectForm.get('image')?.value" [alt]="">
 
     <mat-form-field class="form-field" appearance="outline">
       <mat-label>Price</mat-label>

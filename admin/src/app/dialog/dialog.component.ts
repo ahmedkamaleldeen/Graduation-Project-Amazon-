@@ -2,13 +2,27 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AddProductService } from '../services/add-product.service';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroupDirective,
+  FormBuilder,
+  FormGroup,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 @Component({
@@ -19,7 +33,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class DialogComponent implements OnInit {
   actionButn: string = 'save';
   protectForm!: FormGroup;
-  image :any
+  image: any;
   matcher = new MyErrorStateMatcher();
 
   constructor(
@@ -33,18 +47,18 @@ export class DialogComponent implements OnInit {
       name: ['', Validators.required],
       slug: ['', Validators.required],
       category: ['', Validators.required],
-      image: [null, Validators.required],
-      price: ['', Validators.required],
-      countInStock: ['', Validators.required],
-      brand: ['', Validators.required],
-      rating: [
+      image: [
         null,
         [
           Validators.required,
-          // Validators.maxLength(5),
-          Validators.pattern(/[0-5]/),
+          //  Validators.pattern(/^\w+(\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF))$/)
+          // Validators.pattern(/^[a-zA-Z0-9_]+(\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF))$/)
         ],
       ],
+      price: ['', Validators.required],
+      countInStock: ['', Validators.required],
+      brand: ['', Validators.required],
+      rating: [null, [Validators.required, Validators.max(5)]],
       //  numReviews: ['', Validators.required] ,
       description: ['', Validators.required],
     });
@@ -71,21 +85,19 @@ export class DialogComponent implements OnInit {
     }
   }
 
-
-
-  // onFileChange(event: any) {
-  //   const file: any = event.target.files[0];
-  //   this.protectForm.patchValue({ imag: file });
-  //   const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-  //   if (file && allowedMimeTypes.includes(file.type)) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.image = reader.result as string;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  //   console.log(this.image);
-  // }
+  onFileChange(event: any) {
+    const file: any = event.target.files[0];
+    this.protectForm.patchValue({ image: file });
+    const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    if (file && allowedMimeTypes.includes(file.type)) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.image = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+    console.log(this.image);
+  }
 
   get formControls() {
     return this.protectForm.controls;
@@ -95,9 +107,9 @@ export class DialogComponent implements OnInit {
     console.log(this.protectForm.value);
     if (!this.editData) {
       if (this.protectForm.valid) {
-        console.log(this.protectForm.value)
-        const imgFil :File = this.protectForm.get('image')?.value._files[0]
-        this.api.postProduct(this.protectForm.value,imgFil).subscribe(
+        console.log(this.protectForm.value);
+        const imgFil: File = this.protectForm.get('image')?.value._files[0];
+        this.api.postProduct(this.protectForm.value, imgFil).subscribe(
           (res) => {
             this.protectForm.reset();
             this.dialogRef.close('save');
@@ -118,12 +130,18 @@ export class DialogComponent implements OnInit {
 
   updateProduct() {
     console.log(this.protectForm.value);
-    this.api
-      .putProduct(this.protectForm.value, this.editData._id)
-      .subscribe((res) => {
-        this.protectForm.reset();
-        this.dialogRef.close('update');
-        window.location.reload();
-      });
+    if (this.protectForm.valid) {
+      const imgFil: File = this.protectForm.get('image')?.value._files[0];
+
+      this.api
+        .putProduct(this.protectForm.value, this.editData, imgFil)
+        .subscribe((res) => {
+          this.protectForm.reset();
+          this.dialogRef.close('update');
+          window.location.reload();
+        });
+    } else {
+      alert('form not valid');
+    }
   }
 }

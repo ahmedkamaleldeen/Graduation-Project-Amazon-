@@ -60,9 +60,9 @@
           <th>Price</th>
 
         </tr>
-
+        
           <tr *ngFor="let categorie of order.orderItems">
-            <td>{{ categorie.image }}</td>
+            <td><img src="{{ categorie.image }}" alt="{{ categorie.image }}"></td>
             <td>{{ categorie.name }}</td>
             <td>{{ categorie.quantity }}</td>
             <td>{{ categorie.price | currency }}</td>
