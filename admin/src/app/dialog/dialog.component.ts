@@ -134,7 +134,8 @@ export class DialogComponent implements OnInit {
           }
         );
       } else {
-        alert('form not valid');
+        this.dailogService
+        .openConfirmDialog("form not valid")
       }
     } else {
       this.updateProduct();
@@ -155,7 +156,8 @@ export class DialogComponent implements OnInit {
           window.location.reload();
         });
     } else {
-      alert('form not valid');
+      this.dailogService
+      .openConfirmDialog("form not valid")
     }
   }
 }
