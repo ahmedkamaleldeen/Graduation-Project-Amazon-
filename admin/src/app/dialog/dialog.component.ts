@@ -33,7 +33,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class DialogComponent implements OnInit {
   actionButn: string = 'save';
   protectForm!: FormGroup;
-  image: any;
+  imageData: any;
   matcher = new MyErrorStateMatcher();
 
   constructor(
@@ -85,18 +85,25 @@ export class DialogComponent implements OnInit {
     }
   }
 
-  onFileChange(event: any) {
+  onFileSelect(event: any) {
+    this.imageData = null;
     const file: any = event.target.files[0];
     this.protectForm.patchValue({ image: file });
-    const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg','image/gif', 'image/JPG', 'image/JPEG', 'image/PNG', 'image/GIF'];
     if (file && allowedMimeTypes.includes(file.type)) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.image = reader.result as string;
+        this.imageData = reader.result as string;
       };
       reader.readAsDataURL(file);
+    }else{
+      this.protectForm.controls['image'].reset();
+            
+
+      alert("Please choose a valid image")
+
     }
-    console.log(this.image);
+    console.log(file);
   }
 
   get formControls() {
@@ -105,15 +112,18 @@ export class DialogComponent implements OnInit {
 
   addProduct() {
     console.log(this.protectForm.value);
+    console.log(this.protectForm.get('image')?.value._fileNames);
     if (!this.editData) {
       if (this.protectForm.valid) {
-        console.log(this.protectForm.value);
+        
         const imgFil: File = this.protectForm.get('image')?.value._files[0];
         this.api.postProduct(this.protectForm.value, imgFil).subscribe(
           (res) => {
             this.protectForm.reset();
             this.dialogRef.close('save');
             window.location.reload();
+            this.imageData = null;
+
           },
           (error) => {
             console.log(error);
@@ -127,6 +137,7 @@ export class DialogComponent implements OnInit {
       this.updateProduct();
     }
   }
+
 
   updateProduct() {
     console.log(this.protectForm.value);
