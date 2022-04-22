@@ -10,6 +10,7 @@ import {
   NgForm,
   Validators,
 } from '@angular/forms';
+import { DailogService } from '../shared/dailog.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -37,6 +38,8 @@ export class DialogComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   constructor(
+    private dailogService: DailogService,
+
     private fb: FormBuilder,
     private api: AddProductService,
     @Inject(MAT_DIALOG_DATA) public editData: any, // عشان استلم الداتا في الديلوج هعمل انجيكت ل
@@ -99,8 +102,8 @@ export class DialogComponent implements OnInit {
     }else{
       this.protectForm.controls['image'].reset();
             
-
-      alert("Please choose a valid image")
+      this.dailogService
+      .openConfirmDialog("Please choose an image")
 
     }
     console.log(file);
