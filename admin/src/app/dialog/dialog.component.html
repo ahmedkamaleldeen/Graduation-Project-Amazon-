@@ -35,8 +35,8 @@
         <mat-label> Image</mat-label>
         <ngx-mat-file-input   formControlName="image" placeholder="Select Image" valuePlaceholder="No image file selected"
           [errorStateMatcher]="matcher"
-          
-          
+
+
           ></ngx-mat-file-input>
         <mat-icon matSuffix>folder</mat-icon>
         <mat-error>
@@ -82,7 +82,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="form-field" appearance="outline">
+    <!-- <mat-form-field class="form-field" appearance="outline">
       <mat-label>rating</mat-label>
       <input
         formControlName="rating"
@@ -98,7 +98,7 @@
       <mat-error *ngIf="formControls['rating'].touched ">
         rating is <strong>required</strong>
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <!-- <mat-form-field class="form-field" appearance="outline">
       <mat-label>Number Reviews</mat-label>

@@ -248,8 +248,8 @@ productRouter.put(
         price: req.body.price,
         countInStock: req.body.countInStock,
         brand: req.body.brand,
-        rating: req.body.rating,
-        numReviews: req.body.numReviews,
+        // rating: req.body.rating,
+        // numReviews: req.body.numReviews,
         description: req.body.description,
       });
       res.status(201).send({

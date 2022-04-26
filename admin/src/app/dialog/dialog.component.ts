@@ -61,7 +61,7 @@ export class DialogComponent implements OnInit {
       price: ['', Validators.required],
       countInStock: ['', Validators.required],
       brand: ['', Validators.required],
-      rating: [null, [Validators.required, Validators.max(5)]],
+      // rating: [null, [Validators.required, Validators.max(5)]],
       //  numReviews: ['', Validators.required] ,
       description: ['', Validators.required],
     });
@@ -78,7 +78,7 @@ export class DialogComponent implements OnInit {
         this.editData.countInStock
       );
       this.protectForm.controls['brand'].setValue(this.editData.brand);
-      this.protectForm.controls['rating'].setValue(this.editData.rating);
+      // this.protectForm.controls['rating'].setValue(this.editData.rating);
       // this.protectForm.controls['numReviews'].setValue(
       //   this.editData.numReviews
       // );
@@ -101,7 +101,7 @@ export class DialogComponent implements OnInit {
       reader.readAsDataURL(file);
     }else{
       this.protectForm.controls['image'].reset();
-            
+
       this.dailogService
       .openConfirmDialog("Please choose an image")
 
@@ -118,7 +118,7 @@ export class DialogComponent implements OnInit {
     console.log(this.protectForm.get('image')?.value._fileNames);
     if (!this.editData) {
       if (this.protectForm.valid) {
-        
+
         const imgFil: File = this.protectForm.get('image')?.value._files[0];
         this.api.postProduct(this.protectForm.value, imgFil).subscribe(
           (res) => {
